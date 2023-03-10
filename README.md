@@ -144,3 +144,99 @@ containerMountPath: /data
 
 servicePort: 6379
 ```
+
+###### Step 6: Install helmfile tool
+
+```
+brew install helmfile
+```
+
+###### Step 7: Create a helmfile
+
+```
+releases:
+  - name: rediscart
+    chart: charts/redis
+    values:
+      - values/redis-values.yaml
+      - appReplicas: "1"
+      - volumeName: "redis-cart-data"
+
+  - name: emailservice
+    chart: charts/microservice
+    values:
+      - values/email-service-values.yaml
+
+  - name: cartservice
+    chart: charts/microservice
+    values:
+      - values/cart-service-values.yaml
+
+  - name: currencyservice
+    chart: charts/microservice
+    values:
+      - values/currency-service-values.yaml
+
+  - name: paymentservice
+    chart: charts/microservice
+    values:
+      - values/payment-service-values.yaml
+
+  - name: recommendationservice
+    chart: charts/microservice
+    values:
+      - values/recommendation-service-values.yaml
+
+  - name: productcatalogservice
+    chart: charts/microservice
+    values:
+      - values/productcatalog-service-values.yaml
+
+  - name: shippingservice
+    chart: charts/microservice
+    values:
+      - values/shipping-service-values.yaml
+
+  - name: adservice
+    chart: charts/microservice
+    values:
+      - values/ad-service-values.yaml
+
+  - name: checkoutservice
+    chart: charts/microservice
+    values:
+      - values/checkout-service-values.yaml
+
+  - name: frontendservice
+    chart: charts/microservice
+    values:
+      - values/frontend-values.yaml
+```
+
+###### Step 8: Create a cluster with 3 node on Linode
+
+###### Step 9: Download microservice_kubeconfig.yaml and change its permissions
+
+```
+chmond 600 microservice_kubeconfig.yaml
+```
+
+###### Step 10: Deploy microservice via helmfile
+
+```
+helmfile sync
+```
+
+###### Step 11: Open the load balancer ip in browser(as the frontend use loadbalancer type for external access)
+
+###### Step 11: Check current release
+
+```
+helmfile list
+```
+
+###### Step 12: Uninstall release
+
+```
+helmfile destroy
+```
